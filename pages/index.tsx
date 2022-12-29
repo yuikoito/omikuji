@@ -1,7 +1,21 @@
 import Head from "next/head";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  const []
+  const [
+    deviceorientation,
+    setDeviceorientation,
+  ] = useState<DeviceOrientationEvent>();
+  useEffect(() => {
+    const setValue = (e: DeviceOrientationEvent) => {
+      console.log(e);
+      setDeviceorientation(e);
+    };
+    window.addEventListener("deviceorientation", setValue);
+    return () => {
+      window.removeEventListener("deviceorientation", setValue);
+    };
+  }, []);
   return (
     <>
       <Head>
@@ -10,6 +24,10 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <div>加速度センサーの値を取得する</div>
+      <div>alpha: {deviceorientation?.alpha}</div>
+      <div>beta: {deviceorientation?.beta}</div>
+      <div>gamma: {deviceorientation?.gamma}</div>
     </>
   );
 }
